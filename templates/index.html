@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Weather Pattern Data Explorer</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a73e8">
+</head>
+<body>
+    <div id="bg-layer"></div>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-cloud-bolt text-blue"></i>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-target="page-weather">
+                    <i class="fa-solid fa-cloud-sun"></i>
+                    <span>Weather</span>
+                </li>
+                <li data-target="page-history">
+                    <i class="fa-solid fa-database"></i>
+                    <span>History</span>
+                </li>
+                <li data-target="page-add">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span>Add Data</span>
+                </li>
+                <li data-target="page-chat">
+                    <i class="fa-solid fa-robot"></i>
+                    <span>AI Chat</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            
+            <!-- Global Alerts Overlay -->
+            <div id="alertsOverlay" class="alerts-overlay"></div>
+
+            <!-- WEATHER PAGE -->
+            <section id="page-weather" class="page active">
+                <div class="search-bar-container">
+                    <input type="text" id="cityInput" placeholder="Search for cities...">
+                </div>
+                
+                <div class="weather-dashboard">
+                    <!-- Left Panel -->
+                    <div class="weather-main-panel">
+                        <div class="current-weather-card">
+                            <div class="top-row">
+                                <div class="city-info">
+                                    <h1 id="heroCity">Search City</h1>
+                                    <p id="heroConditions">Enter a city to get started</p>
+                                    <div class="huge-temp"><span id="heroTemp">--</span>°</div>
+                                </div>
+                                <div class="sun-icon">
+                                    <i id="heroIcon" class="fa-solid fa-cloud icon-giant"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hourly-forecast-card card">
+                            <h3>TODAY'S FORECAST</h3>
+                            <div class="hourly-list" id="hourlyList">
+                                <p class="placeholder-text">No forecast data</p>
+                            </div>
+                        </div>
+
+                        <div class="air-conditions-card card">
+                            <div class="card-header-flex">
+                                <h3>AIR CONDITIONS</h3>
+                            </div>
+                            <div class="air-grid">
+                                <div class="air-item">
+                                    <div class="air-label"><i class="fa-solid fa-temperature-half"></i> Real Feel</div>
+                                    <h4 id="airRealFeel">--°</h4>
+                                </div>
+                                <div class="air-item">
+                                    <div class="air-label"><i class="fa-solid fa-wind"></i> Wind</div>
+                                    <h4 id="airWind">-- m/s</h4>
+                                </div>
+                                <div class="air-item">
+                                    <div class="air-label"><i class="fa-solid fa-droplet"></i> Humidity</div>
+                                    <h4 id="airHumidity">--%</h4>
+                                </div>
+                                <div class="air-item">
+                                    <div class="air-label"><i class="fa-solid fa-cloud-showers-heavy"></i> Rainfall (1h)</div>
+                                    <h4 id="airRainfall">-- mm</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel -->
+                    <div class="weather-side-panel">
+                        <div class="weekly-forecast-card card">
+                            <h3>5-DAY FORECAST</h3>
+                            <div class="weekly-list" id="weeklyList">
+                                <p class="placeholder-text">No forecast data</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HISTORY PAGE -->
+            <section id="page-history" class="page">
+                <h2 class="page-title">Historical Weather Log</h2>
+                <div class="card table-card">
+                    <div class="table-container">
+                        <table id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>City</th>
+                                    <th>Station</th>
+                                    <th>Temp (°C)</th>
+                                    <th>Humidity (%)</th>
+                                    <th>Rain (mm)</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <tr>
+                                    <td colspan="7" class="placeholder-text text-center">Loading data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADD DATA PAGE -->
+            <section id="page-add" class="page">
+                <h2 class="page-title">Add Historical Data</h2>
+                <div class="card form-card">
+                    <form id="weatherForm">
+                        <div class="form-group row">
+                            <select id="stationId" required style="width: 100%; padding: 0.8rem; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); border-radius: 8px; margin-right: 15px;">
+                                <option value="" disabled selected>Select Weather Station</option>
+                                <option value="1">Chennai Central Station (ID: 1)</option>
+                                <option value="2">Mumbai Coastal Station (ID: 2)</option>
+                                <option value="3">Delhi North Station (ID: 3)</option>
+                            </select>
+                            <select id="categoryId" style="width: 100%; padding: 0.8rem; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); border-radius: 8px;">
+                                <option value="" disabled selected>Select Climate Category</option>
+                                <option value="1">Cold (ID: 1)</option>
+                                <option value="2">Moderate (ID: 2)</option>
+                                <option value="3">Hot (ID: 3)</option>
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <input type="datetime-local" id="recordDate" required>
+                            <input type="number" step="0.1" id="temperature" placeholder="Temperature (°C)" required>
+                        </div>
+                        <div class="form-group row">
+                            <input type="number" step="0.1" id="humidity" placeholder="Humidity (%)" required>
+                            <input type="number" step="0.1" id="rainfall" placeholder="Rainfall (mm)">
+                        </div>
+                        <div class="form-group row">
+                            <input type="number" step="0.1" id="windSpeed" placeholder="Wind Speed (m/s)">
+                            <input type="number" step="0.1" id="pressure" placeholder="Pressure (hPa)">
+                        </div>
+                        <button type="submit" class="primary-btn btn-full">Add Record</button>
+                        <div id="formMsg"></div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- CHAT PAGE -->
+            <section id="page-chat" class="page">
+                <div class="chat-wrapper">
+                    <div class="chat-header" style="justify-content: space-between; display: flex; align-items: center;">
+                        <div>
+                            <h2><i class="fa-solid fa-robot"></i> SKY mitra</h2>
+                            <p class="subtitle">Powered by NVIDIA LLM</p>
+                        </div>
+                    </div>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message ai-msg">
+                                Hello! I am SKY mitra. How can I help you today?
+                            </div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chatInput" placeholder="Ask about weather patterns...">
+                            <button id="chatSend" class="primary-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js');
+            });
+        }
+    </script>
+</body>
+</html>

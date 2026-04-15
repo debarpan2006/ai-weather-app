@@ -1,0 +1,17 @@
+{
+  "name": "AI Weather Data Explorer",
+  "short_name": "AI Weather",
+  "description": "An AI-powered local weather dashboard.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a73e8",
+  "icons": [
+    {
+      "src": "/static/app-icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,421 @@
+:root {
+    /* Default variables for Light Mode Glassmorphism */
+    --sidebar-bg: rgba(255, 255, 255, 0.7);
+    --card-bg: rgba(255, 255, 255, 0.6);
+    --card-hover: rgba(255, 255, 255, 0.9);
+    --text-primary: #1e293b;
+    --text-muted: #475569;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --border: rgba(0, 0, 0, 0.08);
+    --yellow: #f59e0b;
+    --alert: #ef4444;
+    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    color: var(--text-primary);
+    overflow: hidden; 
+    transition: color 1s ease;
+}
+
+/* Dynamic Background Layer */
+#bg-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%); /* Default Light */
+    transition: background 1.5s ease-in-out, opacity 1.5s ease-in-out;
+}
+
+/* Dark Mode Variables (for Night Theme) */
+body.theme-night {
+    --sidebar-bg: rgba(30, 41, 59, 0.7);
+    --card-bg: rgba(15, 23, 42, 0.6);
+    --card-hover: rgba(30, 41, 59, 0.9);
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary: #818cf8;
+    --primary-hover: #6366f1;
+    --border: rgba(255, 255, 255, 0.1);
+    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.text-yellow { color: var(--yellow); }
+.text-blue { color: var(--primary); }
+
+.app-layout {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 100px;
+    background-color: var(--sidebar-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    border-radius: 24px;
+    margin: 1.5rem 0 1.5rem 1.5rem;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+    z-index: 100;
+    transition: background-color 1s ease, box-shadow 1s ease, border 1s ease;
+}
+
+.brand {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+}
+
+.nav-links {
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.nav-links li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.8rem;
+    padding: 0.5rem 0;
+}
+
+.nav-links li i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.nav-links li:hover {
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.nav-links li.active {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+/* Main Content Area */
+.content-area {
+    flex: 1;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.page {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    right: 2rem;
+    bottom: 2rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+}
+
+.page::-webkit-scrollbar { width: 8px; }
+.page::-webkit-scrollbar-track { background: transparent; }
+.page::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; opacity: 0.5;}
+
+.page.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.page-title {
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* Common Card */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    transition: background-color 1s ease, box-shadow 1s ease, border 1s ease;
+}
+
+.card h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+/* Buttons & Inputs */
+input {
+    background: var(--sidebar-bg);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    outline: none;
+    width: 100%;
+    transition: border 0.3s, background 0.3s;
+}
+
+input:focus {
+    box-shadow: 0 0 0 2px var(--primary);
+    border-color: var(--primary);
+}
+
+.primary-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.primary-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.btn-full { width: 100%; }
+
+/* === WEATHER DASHBOARD === */
+.search-bar-container {
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+.weather-dashboard {
+    display: flex;
+    gap: 2rem;
+    height: calc(100% - 80px);
+}
+
+.weather-main-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.weather-side-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top Current Weather */
+.current-weather-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.city-info h1 { font-size: 2.5rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;}
+.city-info p { color: var(--text-muted); margin-bottom: 1rem; font-size: 1.1rem; }
+.huge-temp { font-size: 5rem; font-weight: 800; line-height: 1; }
+.icon-giant { font-size: 7rem; text-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
+
+/* Hourly Forecast */
+.hourly-list {
+    display: flex;
+    justify-content: space-between;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    gap: 1rem;
+}
+.hourly-list::-webkit-scrollbar { height: 4px; }
+.hourly-list::-webkit-scrollbar-thumb { background: var(--border); }
+
+.hourly-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 65px;
+}
+.hourly-item .time { color: var(--text-muted); font-size: 0.9rem; font-weight: 600;}
+.hourly-item i { font-size: 1.8rem; margin: 0.5rem 0; }
+.hourly-item .temp { font-weight: 700; font-size: 1.2rem; }
+
+/* Air Conditions */
+.air-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.air-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.air-label {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.air-item h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-left: 1.6rem;
+}
+
+/* Weekly forecast */
+.weekly-forecast-card { flex: 1; }
+.weekly-list { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.weekly-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+}
+
+.weekly-item:last-child { border-bottom: none; }
+.weekly-item span { color: var(--text-primary); font-weight: 600; width: 60px; }
+.weekly-item .forecast-icon { font-size: 1.5rem; flex: 1; text-align: center; }
+.weekly-item .forecast-temps { font-weight: 700; width: 60px; text-align: right; }
+
+/* Alerts */
+.alerts-overlay {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.alert-box {
+    background: var(--alert);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === HISTORY PAGE === */
+.table-card { padding: 0; overflow: hidden; }
+.table-container { overflow-x: auto; max-height: 70vh; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 1.2rem; text-align: left; border-bottom: 1px solid var(--border); }
+th { background: rgba(0,0,0,0.05); color: var(--text-muted); position: sticky; top: 0; font-weight: 700; }
+tr:hover td { background: var(--card-hover); }
+
+/* === FORM PAGE === */
+.form-card { max-width: 800px; margin: 0 auto; }
+.form-group { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; }
+#formMsg { margin-top: 1rem; text-align: center; font-weight: 600; }
+
+/* === CHAT PAGE === */
+.chat-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    box-shadow: var(--card-shadow);
+}
+
+.chat-header {
+    padding: 1.5rem;
+    background: rgba(0,0,0,0.05);
+    border-bottom: 1px solid var(--border);
+}
+
+.chat-header h2 { font-size: 1.4rem; color: var(--primary); display: flex; gap: 0.5rem; align-items:center; }
+.chat-header .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.2rem;}
+
+.chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.message {
+    max-width: 80%;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.ai-msg { background: rgba(0,0,0,0.05); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+.user-msg { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 4px 10px rgba(59,130,246,0.3);}
+
+body.theme-night .ai-msg { background: rgba(255,255,255,0.05); }
+
+.chat-input-area {
+    padding: 1.5rem;
+    background: rgba(0,0,0,0.05);
+    display: flex;
+    gap: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.chat-input-area input { flex: 1; background: var(--sidebar-bg); }
+.chat-input-area button { padding: 1rem 1.5rem; }
+
+/* Animations */
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
