@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ai-weather-v1';
+const CACHE_NAME = 'ai-weather-v2';
 const ASSETS = [
   '/',
   '/static/style.css',
