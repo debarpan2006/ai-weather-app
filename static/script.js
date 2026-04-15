@@ -36,19 +36,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return '<i class="fa-solid fa-cloud"></i>';
     }
 
-    function applyTheme(condition, timestamp, timezoneOffset) {
+    function applyTheme(condition) {
         condition = condition.toLowerCase();
         
-        // Calculate if it's day or night locally
-        const localTimeHour = (new Date(timestamp * 1000).getUTCHours() + (timezoneOffset / 3600)) % 24;
-        const isDay = localTimeHour >= 6 && localTimeHour < 19;
+        // Use the browser's own local clock — no UTC or timezone offset math needed
+        const localHour = new Date().getHours();
+        const isDay = localHour >= 6 && localHour < 19;
         
         const bgLayer = document.getElementById('bg-layer');
-        document.body.className = ''; // remove night theme initially
+        document.body.className = ''; // reset theme
         
         if (!isDay) {
             document.body.classList.add('theme-night');
-            bgLayer.style.background = 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)';
+            // Apply a night-specific background based on condition
+            if (condition.includes('clear')) {
+                bgLayer.style.background = 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)';
+            } else if (condition.includes('cloud')) {
+                bgLayer.style.background = 'linear-gradient(135deg, #1e293b 0%, #334155 100%)';
+            } else if (condition.includes('rain') || condition.includes('drizzle')) {
+                bgLayer.style.background = 'linear-gradient(135deg, #0c1a2e 0%, #1e3a5f 100%)';
+            } else if (condition.includes('thunderstorm')) {
+                bgLayer.style.background = 'linear-gradient(135deg, #0f172a 0%, #450a0a 100%)';
+            } else {
+                bgLayer.style.background = 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)';
+            }
             return;
         }
 
@@ -90,9 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('heroTemp').textContent = Math.round(data.temperature);
                 
                 const tempDateTimestamp = Math.floor(Date.now() / 1000);
-                applyTheme(data.conditions, tempDateTimestamp, 0); 
+                applyTheme(data.conditions);
 
-                const iconHtml = getWeatherIcon(data.conditions, true); 
+                const iconHtml = getWeatherIcon(data.conditions, new Date().getHours() >= 6 && new Date().getHours() < 19);
                 const heroIconParent = document.getElementById('heroIcon').parentElement;
                 heroIconParent.innerHTML = `<span class="icon-giant" style="display:inline-block">${iconHtml}</span>`;
 
