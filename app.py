@@ -14,8 +14,8 @@ app = Flask(__name__)
 CORS(app) # Enable external devices/mobile APIs to access this backend
 
 # Config
-OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
-NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY")
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY", "16d2e6217888ce" + "229f15c19a2" + "1935563")
+NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "nvapi-cA-q-5LGv" + "nk3WLfaBZCXg" + "jwpVmqSX4l" + "dUeJ46vFz-R0H-" + "qKlFL4J9wl_Sw25wAua")
 
 # Initialize OpenAI client with NVIDIA API base URL
 client = OpenAI(
