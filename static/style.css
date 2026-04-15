@@ -54,39 +54,44 @@ body.theme-night {
 .text-yellow { color: var(--yellow); }
 .text-blue { color: var(--primary); }
 
-.app-layout {
-    display: flex;
-    height: 100vh;
-}
-
-/* Sidebar */
+/* ---- Floating Pill Bottom Nav (Mobile) ---- */
 .sidebar {
-    width: 100px;
-    background-color: var(--sidebar-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    order: 2;
+    position: fixed;
+    bottom: 1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 3rem);
+    max-width: 420px;
+    height: 64px;
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    padding: 2rem 0;
-    border-radius: 24px;
-    margin: 1.5rem 0 1.5rem 1.5rem;
-    box-shadow: var(--card-shadow);
+    justify-content: space-around;
+    padding: 0 1rem;
+    border-radius: 999px;
     border: 1px solid var(--border);
-    z-index: 100;
-    transition: background-color 1s ease, box-shadow 1s ease, border 1s ease;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    z-index: 200;
+    flex-shrink: 0;
+    transition: background-color 1s ease, box-shadow 1s ease;
 }
 
 .brand {
     font-size: 2rem;
     margin-bottom: 3rem;
+    display: none;
 }
 
 .nav-links {
     list-style: none;
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-around;
     gap: 1.5rem;
 }
 
@@ -111,17 +116,26 @@ body.theme-night {
     transform: translateY(-2px);
 }
 
+/* Developer credit — hidden inside floating pill on mobile */
+.dev-credit {
+    display: none;
+}
+
 .nav-links li.active {
     color: var(--primary);
     font-weight: 700;
 }
 
-/* Main Content Area */
+/* ---- Content Area (Mobile) ---- */
+/* Add bottom padding to prevent content hiding behind the floating pill */
 .content-area {
+    order: 1;
     flex: 1;
-    padding: 2rem;
+    padding: 1rem 1rem 0;
     position: relative;
     overflow: hidden;
+    min-height: 0;
+    padding-bottom: 90px; /* space for floating pill */
 }
 
 .page {
@@ -455,23 +469,29 @@ body.theme-night .ai-msg { background: rgba(255,255,255,0.06); }
     /* Restore vertical sidebar */
     .sidebar {
         order: 0;
-        width: 100px;
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        width: 110px;
+        max-width: none;
         height: auto;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        padding: 2rem 0;
+        padding: 2rem 0 1.5rem;
         border-radius: 24px;
         margin: 1.5rem 0 1.5rem 1.5rem;
-        border-top: none;
-        border: 1px solid var(--border);
         box-shadow: var(--card-shadow);
+        border: 1px solid var(--border);
+        flex-shrink: 0;
     }
 
     .brand { display: block; font-size: 2rem; margin-bottom: 3rem; }
 
     .nav-links {
         flex-direction: column;
+        justify-content: flex-start;
         gap: 1.5rem;
     }
 
@@ -479,10 +499,27 @@ body.theme-night .ai-msg { background: rgba(255,255,255,0.06); }
         font-size: 0.8rem;
         min-height: auto;
         padding: 0.5rem 0;
+        gap: 0;
     }
 
     .nav-links li i { font-size: 1.5rem; margin-bottom: 0.5rem; }
     .nav-links li span { font-size: 0.8rem; }
+
+    /* Developer credit on desktop sidebar */
+    .dev-credit {
+        display: block;
+        margin-top: auto;
+        padding: 1.5rem 0.5rem 0;
+        text-align: center;
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        line-height: 1.4;
+    }
+
+    .dev-credit strong {
+        color: var(--primary);
+        font-size: 0.75rem;
+    }
 
     .content-area {
         order: 1;
