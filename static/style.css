@@ -131,9 +131,21 @@ body.theme-night {
     transform: translateY(-2px);
 }
 
-/* Developer credit — hidden inside floating pill on mobile */
+/* Developer credit — floats above the pill on mobile */
 .dev-credit {
-    display: none;
+    position: fixed;
+    bottom: calc(64px + 1.2rem + 0.5rem); /* just above the pill */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0.7;
+    letter-spacing: 0.3px;
+    transition: opacity 0.3s;
+    z-index: 199;
+    text-align: center;
 }
 
 .nav-links li.active {

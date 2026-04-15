@@ -17,30 +17,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- AUTO-HIDE BOTTOM PILL ON SCROLL ---
     const sidebar = document.querySelector('.sidebar');
+    const devCredit = document.querySelector('.dev-credit');
     let lastScrollY = 0;
     let scrollTimer = null;
+
+    function setNavVisible(visible) {
+        if (visible) {
+            sidebar.classList.remove('sidebar--hidden');
+            if (devCredit) devCredit.style.opacity = '0.7';
+        } else {
+            sidebar.classList.add('sidebar--hidden');
+            if (devCredit) devCredit.style.opacity = '0';
+        }
+    }
 
     function attachScrollHide(page) {
         page.addEventListener('scroll', () => {
             const currentY = page.scrollTop;
             if (currentY > lastScrollY && currentY > 40) {
-                // Scrolling down — hide pill
-                sidebar.classList.add('sidebar--hidden');
+                setNavVisible(false);
             } else {
-                // Scrolling up — show pill
-                sidebar.classList.remove('sidebar--hidden');
+                setNavVisible(true);
             }
             lastScrollY = currentY;
 
-            // Auto-show after user stops scrolling for 1.5s
             clearTimeout(scrollTimer);
-            scrollTimer = setTimeout(() => {
-                sidebar.classList.remove('sidebar--hidden');
-            }, 1500);
+            scrollTimer = setTimeout(() => setNavVisible(true), 1500);
         }, { passive: true });
     }
 
-    // Attach to all pages
     pages.forEach(p => attachScrollHide(p));
 
 
