@@ -26,12 +26,22 @@ client = OpenAI(
 
 def get_db_connection():
     try:
-        connection = mysql.connector.connect(
-            host=os.getenv('MYSQL_HOST', 'localhost'),
-            user=os.getenv('MYSQL_USER', 'root'),
-            password=os.getenv('MYSQL_PASSWORD', 'yourpassword'),
-            database=os.getenv('MYSQL_DATABASE', 'weather_pattern_explorer')
-        )
+        # Determine if SSL should be used (required for Aiven cloud databases)
+        use_ssl = os.getenv('MYSQL_SSL', 'false').lower() == 'true'
+        
+        connect_args = {
+            'host':     os.getenv('MYSQL_HOST', 'localhost'),
+            'user':     os.getenv('MYSQL_USER', 'root'),
+            'password': os.getenv('MYSQL_PASSWORD', 'Mamta@2006'),
+            'database': os.getenv('MYSQL_DATABASE', 'weather_pattern_explorer'),
+            'port':     int(os.getenv('MYSQL_PORT', '3306')),
+        }
+
+        if use_ssl:
+            connect_args['ssl_disabled'] = False
+            connect_args['ssl_verify_cert'] = False  # Aiven self-signed cert
+
+        connection = mysql.connector.connect(**connect_args)
         return connection
     except Error as e:
         print(f"Error connecting to MySQL database: {e}")
