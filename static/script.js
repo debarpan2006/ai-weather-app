@@ -6,20 +6,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            // Remove active from all tabs
             navLinks.forEach(l => l.classList.remove('active'));
-            // Remove active from all pages
             pages.forEach(p => p.classList.remove('active'));
-
-            // Add active to clicked tab and corresponding page
             link.classList.add('active');
             const targetId = link.getAttribute('data-target');
             document.getElementById(targetId).classList.add('active');
-            
-            // Re-fetch history if navigating to history
             if(targetId === 'page-history') fetchHistory();
         });
     });
+
+    // --- AUTO-HIDE BOTTOM PILL ON SCROLL ---
+    const sidebar = document.querySelector('.sidebar');
+    let lastScrollY = 0;
+    let scrollTimer = null;
+
+    function attachScrollHide(page) {
+        page.addEventListener('scroll', () => {
+            const currentY = page.scrollTop;
+            if (currentY > lastScrollY && currentY > 40) {
+                // Scrolling down — hide pill
+                sidebar.classList.add('sidebar--hidden');
+            } else {
+                // Scrolling up — show pill
+                sidebar.classList.remove('sidebar--hidden');
+            }
+            lastScrollY = currentY;
+
+            // Auto-show after user stops scrolling for 1.5s
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+                sidebar.classList.remove('sidebar--hidden');
+            }, 1500);
+        }, { passive: true });
+    }
+
+    // Attach to all pages
+    pages.forEach(p => attachScrollHide(p));
+
 
     // --- WEATHER DASHBOARD ---
     const cityInput = document.getElementById('cityInput');
