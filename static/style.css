@@ -158,7 +158,7 @@ body.theme-night {
     top: 1rem;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 90px; /* sits above the floating pill */
     opacity: 0;
     visibility: hidden;
     transform: translateY(16px);
@@ -167,7 +167,7 @@ body.theme-night {
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding-bottom: 1rem;
+    padding: 0 1rem 1rem;
 }
 
 .page::-webkit-scrollbar { display: none; }
@@ -409,6 +409,14 @@ tr:hover td { background: var(--card-hover); }
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--border);
     box-shadow: var(--card-shadow);
+}
+
+/* Chat page must NOT scroll itself — internal flex layout handles everything */
+#page-chat {
+    overflow: hidden;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat-header {
