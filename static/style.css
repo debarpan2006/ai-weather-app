@@ -54,6 +54,16 @@ body.theme-night {
 .text-yellow { color: var(--yellow); }
 .text-blue { color: var(--primary); }
 
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.app-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    height: 100vh; /* fallback */
+}
+
 /* ---- Floating Pill Bottom Nav (Mobile) ---- */
 .sidebar {
     order: 2;
@@ -140,13 +150,12 @@ body.theme-night {
 
 .page {
     position: absolute;
-    top: 2rem;
-    left: 2rem;
-    right: 2rem;
-    bottom: 2rem;
+    top: 1rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(20px);
     transform: translateY(16px);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
