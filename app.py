@@ -81,10 +81,10 @@ def get_historical_weather():
                 d.rainfall,
                 d.wind_speed,
                 d.pressure
-            FROM Weather_Data d
-            JOIN Weather_Station s ON d.station_id = s.station_id
-            JOIN Location l ON s.location_id = l.location_id
-            LEFT JOIN Climate_Category c ON d.category_id = c.category_id
+            FROM weather_data d
+            JOIN weather_station s ON d.station_id = s.station_id
+            JOIN location l ON s.location_id = l.location_id
+            LEFT JOIN climate_category c ON d.category_id = c.category_id
             ORDER BY d.record_date DESC
             LIMIT 50
         """
@@ -121,7 +121,7 @@ def add_weather():
     try:
         cursor = conn.cursor()
         query = """
-            INSERT INTO Weather_Data 
+            INSERT INTO weather_data
             (station_id, category_id, record_date, temperature, humidity, rainfall, wind_speed, pressure) 
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
