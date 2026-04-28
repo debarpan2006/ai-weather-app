@@ -600,3 +600,39 @@ body.theme-night .ai-msg { background: rgba(255,255,255,0.06); }
     .air-item h4 { font-size: 1.5rem; }
     .page-title { font-size: 1.8rem; }
 }
+/* ============================================================
+   INSIGHTS PAGE — Analytics & Charts
+   ============================================================ */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .analytics-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.chart-card {
+    height: 100%;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 250px;
+    width: 100%;
+}
+
+.mt-2 { margin-top: 2rem; }
+
+#auditTable th { background: rgba(var(--primary-rgb), 0.1); }
+
+.placeholder-text {
+    opacity: 0.6;
+    font-style: italic;
+}
+
+/* Custom colors for charts in JS will handle theme switching */

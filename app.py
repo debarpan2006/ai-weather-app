@@ -97,6 +97,45 @@ def get_historical_weather():
         if conn.is_connected():
             cursor.close()
             conn.close()
+            
+@app.route('/api/analytics', methods=['GET'])
+def get_analytics():
+    conn = get_db_connection()
+    if conn is None:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+        # Fetching from the SQL View we created
+        query = "SELECT * FROM city_climate_trends"
+        cursor.execute(query)
+        records = cursor.fetchall()
+        return jsonify(records), 200
+    except Error as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
+
+@app.route('/api/audit', methods=['GET'])
+def get_audit_logs():
+    conn = get_db_connection()
+    if conn is None:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT * FROM weather_audit ORDER BY action_timestamp DESC LIMIT 20"
+        cursor.execute(query)
+        records = cursor.fetchall()
+        return jsonify(records), 200
+    except Error as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
 
 @app.route('/api/add_weather', methods=['POST'])
 def add_weather():

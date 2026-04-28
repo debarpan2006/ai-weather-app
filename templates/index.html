@@ -7,6 +7,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="manifest" href="/manifest.json">
@@ -36,6 +37,10 @@
                 <li data-target="page-chat">
                     <i class="fa-solid fa-robot"></i>
                     <span>AI Chat</span>
+                </li>
+                <li data-target="page-insights">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Insights</span>
                 </li>
             </ul>
             <div class="dev-credit">Made by <strong>Debarpan Chaudhuri</strong></div>
@@ -199,7 +204,46 @@
                     </div>
                 </div>
             </section>
+            <!-- INSIGHTS PAGE -->
+            <section id="page-insights" class="page">
+                <h2 class="page-title">SQL Analytics & Climate Insights</h2>
+                
+                <div class="analytics-grid">
+                    <div class="card chart-card">
+                        <h3>Temperature Comparison by City</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="tempChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>Humidity vs Rainfall Analysis</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="humidityRainChart"></canvas>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="card mt-2">
+                    <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-clock-rotate-left"></i> Database Audit Logs (SQL Triggers)</h3>
+                    <div class="table-container">
+                        <table id="auditTable">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Action</th>
+                                    <th>Record ID</th>
+                                    <th>Value Recorded</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditTableBody">
+                                <tr>
+                                    <td colspan="4" class="placeholder-text text-center">Loading audit trails...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>

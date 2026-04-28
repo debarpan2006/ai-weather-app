@@ -1,4 +1,8 @@
 .env
+vercel.env
+scratch/
 __pycache__/
 *.pyc
 .gemini/
+.vercel/
+.vercel

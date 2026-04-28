@@ -11,9 +11,116 @@ document.addEventListener('DOMContentLoaded', () => {
             link.classList.add('active');
             const targetId = link.getAttribute('data-target');
             document.getElementById(targetId).classList.add('active');
+            
             if(targetId === 'page-history') fetchHistory();
+            if(targetId === 'page-insights') fetchAnalyticsAndAudit();
         });
     });
+
+    // --- ANALYTICS & AUDIT (DBMS SPECIAL FEATURES) ---
+    let tempChartInstance = null;
+    let humidityChartInstance = null;
+
+    function fetchAnalyticsAndAudit() {
+        // Fetch Analytics (from SQL View)
+        fetch('/api/analytics')
+            .then(res => res.json())
+            .then(data => {
+                if(data.error) return;
+                renderCharts(data);
+            }).catch(console.error);
+
+        // Fetch Audit Logs (from SQL Triggers)
+        fetch('/api/audit')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('auditTableBody');
+                if(data.error || !data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="placeholder-text text-center">No audit logs found.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = '';
+                data.forEach(log => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${new Date(log.action_timestamp).toLocaleString()}</td>
+                        <td><span class="badge ${log.action_type === 'INSERT' ? 'badge-blue' : 'badge-yellow'}">${log.action_type}</span></td>
+                        <td>#${log.data_id}</td>
+                        <td>${log.new_temp}°C</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }).catch(console.error);
+    }
+
+    function renderCharts(data) {
+        const labels = data.map(d => d.city);
+        const temps = data.map(d => d.avg_temp);
+        const humidity = data.map(d => d.avg_humidity);
+        const rainfall = data.map(d => d.total_rainfall);
+
+        const isDark = document.body.classList.contains('theme-night');
+        const textColor = isDark ? '#f8fafc' : '#1e293b';
+
+        // Temperature Chart
+        if(tempChartInstance) tempChartInstance.destroy();
+        const tempCtx = document.getElementById('tempChart').getContext('2d');
+        tempChartInstance = new Chart(tempCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Avg Temperature (°C)',
+                    data: temps,
+                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                    borderColor: '#3b82f6',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: textColor } },
+                    x: { ticks: { color: textColor } }
+                },
+                plugins: { legend: { labels: { color: textColor } } }
+            }
+        });
+
+        // Humidity/Rain Chart
+        if(humidityChartInstance) humidityChartInstance.destroy();
+        const humCtx = document.getElementById('humidityRainChart').getContext('2d');
+        humidityChartInstance = new Chart(humCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Avg Humidity (%)',
+                        data: humidity,
+                        borderColor: '#818cf8',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Total Rainfall (mm)',
+                        data: rainfall,
+                        borderColor: '#ef4444',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: textColor } },
+                    x: { ticks: { color: textColor } }
+                },
+                plugins: { legend: { labels: { color: textColor } } }
+            }
+        });
+    }
 
     // --- AUTO-HIDE BOTTOM PILL ON SCROLL ---
     const sidebar = document.querySelector('.sidebar');
